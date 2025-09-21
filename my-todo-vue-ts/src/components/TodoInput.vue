@@ -1,7 +1,7 @@
 <template>
   <div class="todo-input-container">
     <input
-      v-model="localInput"
+      v-model="inputText"
       @keyup.enter="onAdd"
       placeholder="入力してください"
     />
@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from "vue";
+import { defineComponent, computed } from "vue";
 
 export default defineComponent({
   name: "TodoInput",
@@ -22,19 +22,10 @@ export default defineComponent({
   },
   emits: ["update:modelValue", "add-todo"],
   setup(props, { emit }) {
-    const localInput = ref(props.modelValue);
-
-    // 親から値が変わったら同期
-    watch(
-      () => props.modelValue,
-      (newVal) => {
-        localInput.value = newVal;
-      }
-    );
-
-    // 入力が変わったら親に伝える
-    watch(localInput, (newVal) => {
-      emit("update:modelValue", newVal);
+    // 双方向バインディング用の computed
+    const inputText = computed({
+      get: () => props.modelValue,
+      set: (val: string) => emit("update:modelValue", val),
     });
 
     // Todo 追加イベント
@@ -43,11 +34,9 @@ export default defineComponent({
     };
 
     return {
-      localInput,
+      inputText,
       onAdd,
     };
   },
 });
 </script>
-
-

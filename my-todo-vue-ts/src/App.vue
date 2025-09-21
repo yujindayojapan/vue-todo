@@ -1,5 +1,5 @@
 <template>
-  <div className="app">
+  <div class="app">
     <h1>
       Todoリスト
       <img src="@/assets/favicon.ico" alt="Vue" class="framework-icon" />
